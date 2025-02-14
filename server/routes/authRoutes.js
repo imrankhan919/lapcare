@@ -4,6 +4,7 @@ const {
   login,
   privateController,
 } = require("../controllers/authController");
+const protect = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
@@ -19,6 +20,6 @@ router.post("/", register);
 // DESC : LOGIN EXISTING USER
 router.post("/login", login);
 
-router.post("/private", privateController);
+router.post("/private", protect, privateController);
 
 module.exports = router;
