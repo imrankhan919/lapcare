@@ -18,6 +18,9 @@ const PORT = process.env.PORT || 5000;
 // User Routes
 app.use("/api/user", require("./routes/authRoutes"));
 
+// Complaint Routes
+app.use("/api/complaint", require("./routes/complaintRoutes"));
+
 // errorHandler
 app.use(errorHandler);
 
