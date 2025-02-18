@@ -18,4 +18,6 @@ router.post("/", protect, raiseComplaint);
 // Update Complaint
 router.put("/:id", protect, updateComplaint);
 
+router.use("/:id/comment", require("./commentRoutes"));
+
 module.exports = router;

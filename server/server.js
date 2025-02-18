@@ -15,6 +15,12 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 5000;
 
+app.get("/", (req, res) => {
+  res.json({
+    msg: "LAPCARE API RUNNING...",
+  });
+});
+
 // User Routes
 app.use("/api/user", require("./routes/authRoutes"));
 
