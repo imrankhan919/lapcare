@@ -27,6 +27,9 @@ app.use("/api/user", require("./routes/authRoutes"));
 // Complaint Routes
 app.use("/api/complaint", require("./routes/complaintRoutes"));
 
+// Admin Routes
+app.use("/api/admin", require("./routes/adminRoutes"));
+
 // errorHandler
 app.use(errorHandler);
 
