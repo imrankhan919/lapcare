@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
 import AllComplaints from "./pages/AllComplaints";
@@ -14,22 +9,25 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import RaiseComplaint from "./pages/RaiseComplaint";
+import PrivateComponent from "./components/PrivateComponent";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/raise-complaint" element={<RaiseComplaint />} />
-        <Route path="/complaints" element={<AllComplaints />} />
-        <Route path="/complaints/:id" element={<SingleComplaint />} />
+        <Route path="/" element={<PrivateComponent />}>
+          <Route path="" element={<Home />} />
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="raise-complaint" element={<RaiseComplaint />} />
+          <Route path="complaints" element={<AllComplaints />} />
+          <Route path="complaints/:id" element={<SingleComplaint />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </Router>
   );
 };
 

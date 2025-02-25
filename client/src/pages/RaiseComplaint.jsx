@@ -1,8 +1,10 @@
 import React from "react";
+import BackButton from "../components/BackButton";
 
 const RaiseComplaint = () => {
   return (
     <div className="min-h-screen p-10">
+      <BackButton url={"/"} />
       <h1 className="text-center font-bold text-xl">Raise New Complaint</h1>
 
       <div className="p-5 border my-5">
