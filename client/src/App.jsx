@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
 import AllComplaints from "./pages/AllComplaints";
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <ToastContainer />
       <Footer />
     </Router>
   );

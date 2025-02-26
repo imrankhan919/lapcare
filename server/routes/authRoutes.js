@@ -12,7 +12,7 @@ const router = express.Router();
 // ROUTE : /api/user/
 // METHOD : POST
 // DESC : REGISTER NEW USER
-router.post("/", register);
+router.post("/register", register);
 
 // ACCESS : PUBLIC
 // ROUTE : /api/user/login
