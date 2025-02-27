@@ -1,35 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BackButton from "../components/BackButton";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Loader from "../components/Loader";
+import { getComplaint } from "../features/complaint/complaintSlice";
 
 const SingleComplaint = () => {
+  const { singleComplaint, isLoading, isError, message } = useSelector(
+    (state) => state.complaint
+  );
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getComplaint(id));
+
+    if (isError && message) {
+      toast.error(message);
+    }
+  }, [isError, message]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className="min-h-screen p-10">
       <BackButton url={"/complaints"} />
       <div className="my-2 relative p-5 border border-gray-400 flex items-center justify-between flex-col md:flex-row">
         <div className="absolute top-3 left-3 bg-red-500 rounded-full text-center py-0.5 px-2 text-white font-bold">
-          open
+          {singleComplaint?.status}
         </div>
         <div className="my-4 w-full md:w-1/2 text-center md:text-left">
-          <h1 className="text-2xl font-bold my-2">Laptop</h1>
+          <h1 className="text-2xl font-bold my-2">{singleComplaint?.laptop}</h1>
           <p className="text-sm font-semibold text-gray-600 my-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius,
-            consequuntur molestiae ipsum ducimus perferendis sint ut cum alias
-            voluptatum cumque voluptatem iste magnam dolorum et neque velit ab
-            pariatur delectus.
+            {singleComplaint?.description}
           </p>
           <p className="text-sm font-semibold text-gray-600 my-2">
-            Date : 25-Feb-25
+            Date :{" "}
+            {new Date(singleComplaint?.createdAt).toLocaleDateString("en-IN")}
           </p>
           <p className="text-sm font-semibold text-gray-600 my-2">
-            Complaint Id : sd4f65s4f65sd4f65s
+            Complaint Id : {singleComplaint._id}
           </p>
         </div>
         <div>
-          <img
-            className="h-72"
-            src="https://lntsufin.com/storage/mediafiles/catalog/live/15805-19/original/15805-19_image_0.jpg"
-            alt=""
-          />
+          <img className="h-72" src={singleComplaint?.image} alt="" />
         </div>
       </div>
 
@@ -57,8 +75,11 @@ const SingleComplaint = () => {
         </div>
       </div>
 
-      <button className="bg-red-400 my-2 py-2 px-4 w-full text-white font-bold hover:bg-red-600 duration-200 hover:cursor-pointer">
-        Close My Complaint
+      <button
+        className="bg-red-400 my-2 py-2 px-4 w-full text-white font-bold hover:bg-red-600 duration-200 hover:cursor-pointer disabled:bg-gray-500"
+        disabled={singleComplaint.status === "close"}
+      >
+        {singleComplaint.status === "close" ? "Closed" : "Close My Complaint"}
       </button>
     </div>
   );
