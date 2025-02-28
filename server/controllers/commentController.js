@@ -30,9 +30,9 @@ const getComments = asyncHandler(async (req, res) => {
 });
 
 const addComment = asyncHandler(async (req, res) => {
-  const { message } = req.body;
+  const { text } = req.body;
 
-  if (!message) {
+  if (!text) {
     res.status(400);
     throw new Error("Please Fill Details!!");
   }
@@ -55,7 +55,7 @@ const addComment = asyncHandler(async (req, res) => {
   const comment = await Comment.create({
     user: user._id,
     complaint: complaint._id,
-    message,
+    message: text,
   });
 
   if (!comment) {

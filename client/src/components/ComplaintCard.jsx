@@ -4,7 +4,15 @@ import { Link } from "react-router-dom";
 const ComplaintCard = ({ complaint }) => {
   return (
     <div className="relative border p-4 border-gray-400 ">
-      <div className="absolute top-3 right-3 bg-red-500 rounded-full text-center py-0.5 px-2 text-white font-bold">
+      <div
+        className={
+          complaint.status === "open"
+            ? "absolute top-3 right-3 bg-green-500 rounded-full text-center py-0.5 px-2 text-white font-bold"
+            : complaint.status === "pending"
+            ? "absolute top-3 right-3 bg-gray-500 rounded-full text-center py-0.5 px-2 text-white font-bold"
+            : "absolute top-3 right-3 bg-red-500 rounded-full text-center py-0.5 px-2 text-white font-bold"
+        }
+      >
         {complaint.status}
       </div>
       <h1 className="font-bold my-2">Product : {complaint.laptop}</h1>

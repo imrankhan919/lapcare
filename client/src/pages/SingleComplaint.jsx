@@ -1,26 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import { getComplaint } from "../features/complaint/complaintSlice";
+import Comment from "../components/Comment";
+import { createComment, getComments } from "../features/comment/commentSlice";
 
 const SingleComplaint = () => {
   const { singleComplaint, isLoading, isError, message } = useSelector(
     (state) => state.complaint
   );
 
+  const { comments } = useSelector((state) => state.comment);
+
+  const [text, setText] = useState("");
+
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    dispatch(
+      createComment({
+        id: id,
+        text: text,
+      })
+    );
+    setText("");
+  };
+
   useEffect(() => {
+    // Fetch Complaint
     dispatch(getComplaint(id));
+    // Fetch Comments
+    dispatch(getComments(id));
 
     if (isError && message) {
       toast.error(message);
     }
-  }, [isError, message]);
+  }, [isError, message, id]);
 
   if (isLoading) {
     return <Loader />;
@@ -30,11 +50,21 @@ const SingleComplaint = () => {
     <div className="min-h-screen p-10">
       <BackButton url={"/complaints"} />
       <div className="my-2 relative p-5 border border-gray-400 flex items-center justify-between flex-col md:flex-row">
-        <div className="absolute top-3 left-3 bg-red-500 rounded-full text-center py-0.5 px-2 text-white font-bold">
+        <div
+          className={
+            singleComplaint.status === "open"
+              ? "absolute top-3 right-3 bg-green-500 rounded-full text-center py-0.5 px-2 text-white font-bold"
+              : singleComplaint.status === "pending"
+              ? "absolute top-3 right-3 bg-gray-500 rounded-full text-center py-0.5 px-2 text-white font-bold"
+              : "absolute top-3 right-3 bg-red-500 rounded-full text-center py-0.5 px-2 text-white font-bold"
+          }
+        >
           {singleComplaint?.status}
         </div>
         <div className="my-4 w-full md:w-1/2 text-center md:text-left">
-          <h1 className="text-2xl font-bold my-2">{singleComplaint?.laptop}</h1>
+          <h1 className="text-2xl font-bold my-2 uppercase">
+            Brand : {singleComplaint?.laptop}
+          </h1>
           <p className="text-sm font-semibold text-gray-600 my-2">
             {singleComplaint?.description}
           </p>
@@ -52,8 +82,10 @@ const SingleComplaint = () => {
       </div>
 
       <div className="my-5 border border-gray-400 p-5">
-        <form>
+        <form onSubmit={handleAddComment}>
           <input
+            onChange={(e) => setText(e.target.value)}
+            value={text}
             type="text"
             placeholder="Enter Comment"
             className="border border-gray-500 w-full p-2"
@@ -63,16 +95,9 @@ const SingleComplaint = () => {
           </button>
         </form>
 
-        <div className="my-2 border border-gray-400 p-4">
-          <h2 className="text-lg font-semibold">Repair ASAP!!</h2>
-          <p className="text-gray-400 text-sm ">25-Feb-25</p>
-        </div>
-        <div className="bg-gray-200 my-2 border border-gray-400 p-4">
-          <h2 className="text-lg font-semibold">
-            Kar Rahe Hai Itni Jaldi Kya H?
-          </h2>
-          <p className="text-gray-400 text-sm ">25-Feb-25</p>
-        </div>
+        {comments.map((comment) => (
+          <Comment key={comment._id} comment={comment} />
+        ))}
       </div>
 
       <button
