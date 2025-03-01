@@ -11,6 +11,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import RaiseComplaint from "./pages/RaiseComplaint";
 import PrivateComponent from "./components/PrivateComponent";
+import AllUsers from "./pages/AllUsers";
+import AllComments from "./pages/AllComments";
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
         <Route path="/" element={<PrivateComponent />}>
           <Route path="" element={<Home />} />
           <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/users" element={<AllUsers />} />
+          <Route path="admin/comments" element={<AllComments />} />
           <Route path="raise-complaint" element={<RaiseComplaint />} />
           <Route path="complaints" element={<AllComplaints />} />
           <Route path="complaints/:id" element={<SingleComplaint />} />

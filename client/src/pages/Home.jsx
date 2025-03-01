@@ -1,7 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.isAdmin) {
+      navigate("/admin");
+    }
+  }, [user]);
+
   return (
     <div className="min-h-screen p-10">
       <h1 className="text-xl font-bold text-center">Welcome User</h1>

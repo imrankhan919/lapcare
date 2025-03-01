@@ -64,6 +64,23 @@ const complaintSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(closeComplaint.pending, (state, action) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+      })
+      .addCase(closeComplaint.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.singleComplaint = action.payload;
+        state.isError = false;
+      })
+      .addCase(closeComplaint.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
@@ -105,6 +122,20 @@ export const raiseComplaint = createAsyncThunk(
     const token = thunkAPI.getState().auth.user.token;
     try {
       return await complaintService.addComplaint(formData, token);
+    } catch (error) {
+      const message = error.response.data.msg;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// CLOSE COMPLAINT
+export const closeComplaint = createAsyncThunk(
+  "CLOSE/COMPLAINT",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+    try {
+      return await complaintService.updateComplaint(id, token);
     } catch (error) {
       const message = error.response.data.msg;
       return thunkAPI.rejectWithValue(message);

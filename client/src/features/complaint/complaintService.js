@@ -33,10 +33,26 @@ const addComplaint = async (formData, token) => {
   return response.data;
 };
 
+const updateComplaint = async (id, token) => {
+  const options = {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    "/api/complaint/" + id,
+    { status: "close" },
+    options
+  );
+  return response.data;
+};
+
 const complaintService = {
   fetchComplaints,
   fetchComplaint,
   addComplaint,
+  updateComplaint,
 };
 
 export default complaintService;

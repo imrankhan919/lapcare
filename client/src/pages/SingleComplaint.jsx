@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
-import { getComplaint } from "../features/complaint/complaintSlice";
+import {
+  closeComplaint,
+  getComplaint,
+} from "../features/complaint/complaintSlice";
 import Comment from "../components/Comment";
 import { createComment, getComments } from "../features/comment/commentSlice";
 
 const SingleComplaint = () => {
+  const { user } = useSelector((state) => state.auth);
   const { singleComplaint, isLoading, isError, message } = useSelector(
     (state) => state.complaint
   );
@@ -19,6 +23,11 @@ const SingleComplaint = () => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleCloseComplaint = (id) => {
+    dispatch(closeComplaint(id));
+  };
 
   const handleAddComment = (e) => {
     e.preventDefault();
@@ -32,6 +41,10 @@ const SingleComplaint = () => {
   };
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+
     // Fetch Complaint
     dispatch(getComplaint(id));
     // Fetch Comments
@@ -40,7 +53,7 @@ const SingleComplaint = () => {
     if (isError && message) {
       toast.error(message);
     }
-  }, [isError, message, id]);
+  }, [isError, message, id, user]);
 
   if (isLoading) {
     return <Loader />;
@@ -101,6 +114,7 @@ const SingleComplaint = () => {
       </div>
 
       <button
+        onClick={() => handleCloseComplaint(id)}
         className="bg-red-400 my-2 py-2 px-4 w-full text-white font-bold hover:bg-red-600 duration-200 hover:cursor-pointer disabled:bg-gray-500"
         disabled={singleComplaint.status === "close"}
       >
